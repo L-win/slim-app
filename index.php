@@ -30,29 +30,34 @@ $app -> get( '/post/{id}', function ( $request, $response, array $args ) {
 	
 $app -> get('/page/{page}', function ( $request, $response, array $args ) {
 	$db = new db( );
-	$page = (int) $args['page'];
+	$page = $args['page'];
 	$page = filter_var( $page, FILTER_SANITIZE_STRING );
 	$sql = $db -> page_sql( $page );
-	$this -> view -> render( $response, 'header.php' , array( 'title' => 'Page '.$args['page'] ) );
+	$this -> view -> render( $response, 'header.php' , array( 'title' => 'Page '.$page ) );
 	$this -> view -> render( $response, 'page.php', array( 'rows' => $sql ) );
 	$this -> view -> render( $response, 'footer.php' );	
 });
 
 $app -> get('/search', function ( $request, $response ) {
-	$db = new db();
-	$query =@ $request -> getQueryParams()['query'];
+	$db = new db( );
+	$query = @$request -> getQueryParams()['query'];
+	$query =  htmlentities($query);
 	if ( is_null( $query ) ){
 		$this -> view -> render( $response, '404.php' );
 		return $response -> withStatus(404);
 	}
-	if ( !empty ($query) and isset($query) ){
+	if ( !empty( $query ) and isset( $query ) ){
 		$sql = $db -> search_sql( $query );
 		$this -> view -> render( $response, 'header.php' , array( 'title' => 'Search' ) );
-		$this -> view -> render( $response, 'search.php', array ('rows'=>$sql) );
+		if ( mysqli_num_rows( $sql ) > 0 ){
+			$this -> view -> render( $response, 'search.php', array ( 'rows' => $sql ) );
+		}else{
+			$response -> getBody( ) -> write( 'Nothing found.' );
+		}
 		$this -> view -> render( $response, 'footer.php' );	
 	}else{
 		$this -> view -> render( $response, 'header.php' , array( 'title' => 'Search' ) );
-		$response -> getBody() -> write('Search request is empty.');
+		$response -> getBody( ) -> write( 'Search request is empty.' );
 		$this -> view -> render( $response, 'footer.php' );	
 		return $response;
 	}
