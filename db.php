@@ -45,6 +45,12 @@ class db {
 
 		return mysqli_query( $this -> db, "select * from posts order by id desc limit $start, $limit" );
 	}
+	
+	public function search_sql( $query ){
+		$query = mysqli_real_escape_string( $this -> db, $query );
+		return mysqli_query( $this->db, "select * from posts where title like '%$query%'");
+	}
+	
 }
 
 ?>
