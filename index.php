@@ -24,7 +24,6 @@ $app -> get( '/post/{id}', function ( $request, $response, array $args ) {
 		$this -> view -> render( $response, 'footer.php' );
 	}else{
 		header( "HTTP/1.0 404 Not Found" ); 
-		var_dump($id);
 		die( '404' );
 	}
 });
@@ -41,9 +40,12 @@ $app -> get('/page/{page}', function ( $request, $response, array $args ) {
 
 $app -> get('/search', function ( $request, $response ) {
 	$db = new db();
-	$query = $request -> getQueryParams();
-	$query = $query['query'];
-	if ( !empty ($query) ){
+	$query =@ $request -> getQueryParams()['query'];
+	if ( is_null( $query ) ){
+		header( "HTTP/1.0 404 Not Found" ); 
+		die( '404' );
+	}
+	if ( !empty ($query) and isset($query) ){
 		$sql = $db -> search_sql( $query );
 		$this -> view -> render( $response, 'header.php' , array( 'title' => 'Search' ) );
 		$this -> view -> render( $response, 'search.php', array ('rows'=>$sql) );
