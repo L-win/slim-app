@@ -23,8 +23,8 @@ $app -> get( '/post/{id}', function ( $request, $response, array $args ) {
 		$this -> view -> render( $response, 'related.php' , array( 'title' => 'Related posts' ) );
 		$this -> view -> render( $response, 'footer.php' );
 	}else{
-		header( "HTTP/1.0 404 Not Found" ); 
-		die( '404' );
+		$this -> view -> render( $response, '404.php' );
+		return $response -> withStatus(404);
 	}
 });
 	
@@ -42,8 +42,8 @@ $app -> get('/search', function ( $request, $response ) {
 	$db = new db();
 	$query =@ $request -> getQueryParams()['query'];
 	if ( is_null( $query ) ){
-		header( "HTTP/1.0 404 Not Found" ); 
-		die( '404' );
+		$this -> view -> render( $response, '404.php' );
+		return $response -> withStatus(404);
 	}
 	if ( !empty ($query) and isset($query) ){
 		$sql = $db -> search_sql( $query );
@@ -52,7 +52,7 @@ $app -> get('/search', function ( $request, $response ) {
 		$this -> view -> render( $response, 'footer.php' );	
 	}else{
 		$this -> view -> render( $response, 'header.php' , array( 'title' => 'Search' ) );
-		$response->getBody()->write('Search request is empty.');
+		$response -> getBody() -> write('Search request is empty.');
 		$this -> view -> render( $response, 'footer.php' );	
 		return $response;
 	}
