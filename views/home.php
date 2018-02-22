@@ -1,13 +1,19 @@
 <?php while ( $row = mysqli_fetch_assoc( $rows ) ){ ?>
-		<h3><?= $row['title'] ?></h3>
-		<?= $row['body'] ?><br>
-		<a href="/slim-app/post/<?= $row['id'] ?>">Read more</a>
-		<br><br>
+<br>
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title"><?= $row['title'] ?></h5>
+    <p class="card-text"><?= substr( $row['body'], 0, 80 ).' ...'; ?>
+	</p>
+    <a href="/slim-app/post/<?= $row['id'] ?>">Read more</a>
+  </div>
+</div>
 <?php } ?>
-
+<br>
 <div class="pages">
-	<a href="/slim-app/page/1">Page 1</a>
-	<a href="/slim-app/page/2">Page 2</a>
-	<a href="/slim-app/page/3">Page 3</a>
-	<a href="/slim-app/page/1">...</a>
+	<ul class="pagination">
+		<li class="page-item"><a class="page-link" href="/slim-app/page/1">1</a></li>
+		<li class="page-item"><a class="page-link" href="/slim-app/page/2">2</a></li>
+		<li class="page-item"><a class="page-link" href="/slim-app/page/3">3</a></li>
+	  </ul>
 </div>

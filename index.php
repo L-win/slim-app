@@ -41,7 +41,7 @@ $app -> get('/page/{page}', function ( $request, $response, array $args ) {
 $app -> get('/search', function ( $request, $response ) {
 	$db = new db( );
 	$query = @$request -> getQueryParams()['query'];
-	$query =  htmlentities($query);
+	$query =  htmlentities( $query );
 	if ( is_null( $query ) ){
 		$this -> view -> render( $response, '404.php' );
 		return $response -> withStatus(404);
