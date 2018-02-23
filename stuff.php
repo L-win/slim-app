@@ -5,7 +5,12 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 require 'vendor/autoload.php';
 
-$app = new \Slim\App( );
+$app = new \Slim\App([
+    'settings' => [
+        'displayErrorDetails' => true
+    ]
+] );
+
 
 $container = $app -> getContainer( );
 $container['view'] = new \Slim\Views\PhpRenderer('views/');

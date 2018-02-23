@@ -2,6 +2,7 @@
 
 require_once 'stuff.php';
 require_once 'db.php';
+require_once 'cache.php';
 
 $app -> get( '/', function ( $request, $response ) {
 	$db = new db( );
@@ -14,17 +15,31 @@ $app -> get( '/', function ( $request, $response ) {
 $app -> get( '/post/{id}', function ( $request, $response, array $args ) {
 	$id = (int) $args['id'];
 	$id = filter_var( $id, FILTER_SANITIZE_STRING );
-	$db = new db( );
-	$sql = $db -> post_sql( $id );
-	if ( mysqli_num_rows( $sql ) != 0 ){
-		$sql = mysqli_fetch_assoc( $sql );
+	$cache  = new Cache( );
+	
+	if ( $cache -> isCached( $id ) ){
+		echo '! CACHED !';
+		$sql = $cache -> retrieve( $id );
 		$this -> view -> render( $response, 'header.php' , array( 'title' => $sql['title'] ) );
 		$this -> view -> render( $response, 'post.php' , array( 'row' => $sql ) );
 		$this -> view -> render( $response, 'related.php' , array( 'title' => 'Related posts' ) );
 		$this -> view -> render( $response, 'footer.php' );
-	}else{
-		$this -> view -> render( $response, '404.php' );
-		return $response -> withStatus(404);
+	}
+	else {
+		$db = new db( );
+		$sql = $db -> post_sql( $id );
+		if ( mysqli_num_rows( $sql ) != 0 ){
+			$sql = mysqli_fetch_assoc( $sql );
+			$cache -> store ( $id, $sql );
+			$this -> view -> render( $response, 'header.php' , array( 'title' => $sql['title'] ) );
+			$this -> view -> render( $response, 'post.php' , array( 'row' => $sql ) );
+			$this -> view -> render( $response, 'related.php' , array( 'title' => 'Related posts' ) );
+			$this -> view -> render( $response, 'footer.php' );
+		}
+		else{
+			$this -> view -> render( $response, '404.php' );
+			return $response -> withStatus(404);	
+		}
 	}
 });
 	
