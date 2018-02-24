@@ -14,6 +14,7 @@ class ComposerStaticInitea830778ef0afe16948ca99eb1605014
         'S' => 
         array (
             'Slim\\Views\\' => 11,
+            'Slim\\Flash\\' => 11,
             'Slim\\' => 5,
         ),
         'P' => 
@@ -35,6 +36,10 @@ class ComposerStaticInitea830778ef0afe16948ca99eb1605014
         'Slim\\Views\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/php-view/src',
+        ),
+        'Slim\\Flash\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/slim/flash/src',
         ),
         'Slim\\' => 
         array (

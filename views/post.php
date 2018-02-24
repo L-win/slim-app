@@ -1,3 +1,4 @@
+<?php include 'header.php'?>
 <br>
 <div class="card">
   <div class="card-body">
@@ -5,3 +6,5 @@
     <p class="card-text"><?= $row['body'] ?></p>
   </div>
 </div>
+<?php include 'related.php'?>
+<?php include 'footer.php'?>

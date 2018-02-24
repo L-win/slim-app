@@ -1,3 +1,4 @@
+<?php include 'header.php'?>
 <?php while ( $row = mysqli_fetch_assoc( $rows ) ){ ?>
 <br>
 <div class="card">
@@ -16,3 +17,4 @@
 		<li class="page-item"><a class="page-link" href="/slim-app/page/3">3</a></li>
 	</ul>
 </div>
+<?php include 'footer.php'?>

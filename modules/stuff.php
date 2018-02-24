@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
@@ -13,6 +15,6 @@ $app = new \Slim\App([
 
 
 $container = $app -> getContainer( );
-$container['view'] = new \Slim\Views\PhpRenderer('views/');
-
+$container['view'] = new \Slim\Views\PhpRenderer('views/', ['cache' => 'cache/' ]);
+$container['flash'] = function () {return new \Slim\Flash\Messages();};
 ?>
